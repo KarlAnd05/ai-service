@@ -1,0 +1,11 @@
+{
+  "name": "askdrscott-ai-service",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "python src/server.py",
+    "start": "python src/server.py",
+    "index": "python src/rebuild_index.py",
+    "train:intents": "python src/train_intent_model.py"
+  }
+}
