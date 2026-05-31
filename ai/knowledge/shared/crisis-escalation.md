@@ -5,12 +5,22 @@ Use this content when a message suggests crisis risk or immediate safety concern
 ## Messages that should trigger crisis mode
 
 - "I want to die."
+- "I want to kill myself."
+- "I want to end my life."
+- "I want to commit suicide."
+- "I want to suicide."
+- "I'm suicidal."
 - "I want to hurt myself."
+- "I want to jump from a building."
+- "I'm going to jump off a bridge."
+- "I want to jump from the balcony."
 - "I want to hurt someone."
 - "I don't feel safe."
 - "I have a plan."
 - "I already took something."
 - "I don't want to be here anymore."
+- "I don't want to live."
+- "I can't go on."
 - Any message describing immediate danger, self-harm, overdose, or violence.
 
 ## Messages that should NOT trigger crisis mode by themselves
@@ -42,22 +52,22 @@ These messages can be serious and deserve empathy, but they should not be treate
 4. Encourage reaching a trusted person who can stay with them.
 5. If possible, suggest moving away from anything that could be used for self-harm.
 
-## U.S. crisis wording
+## Lebanon crisis wording
 
-If the project is used in the United States, the chatbot may say:
+If the project is used in Lebanon, the chatbot should say:
 
-- Call or text 988 for the Suicide and Crisis Lifeline.
-- In life-threatening emergencies, call 911.
+- Call 1564 now for the Embrace Lifeline, Lebanon's national emotional support and suicide prevention helpline.
+- If the danger is immediate or the person cannot stay safe, call 140 for ambulance support or 112/999 for police right away.
 
-## Outside the U.S.
+## Outside Lebanon
 
-If the user is outside the United States, the chatbot should say:
+If the user is outside Lebanon, the chatbot should say:
 
 - Contact local emergency services or a local crisis line immediately.
 
 ## Example response
 
-"I'm really sorry you're going through this. Your safety matters most right now. Please call or text 988 now if you're in the U.S., or contact your local emergency services if you're elsewhere. If you can, reach out to a trusted person who can stay with you right now."
+"I'm really sorry you're going through this. Your safety matters most right now. If you're in Lebanon, please call 1564 now. If you're in immediate danger or you do not feel you can stay safe, call 140 for ambulance support or 112/999 for police right now. If you're outside Lebanon, contact your local emergency services or a local crisis line immediately. If you can, reach out to a trusted person who can stay with you right now, and move away from anything you could use to hurt yourself."
 
 ## Important note for the project team
 

@@ -3,6 +3,7 @@ import socket
 from urllib import error, request
 
 from config import config
+from crisis import build_crisis_reply, is_crisis_message
 
 
 def embed_query(question):
@@ -94,6 +95,9 @@ def build_fallback_reply(coach_name, user_message):
 
     def mentions_any(*terms):
         return any(term in normalized_message for term in terms)
+
+    if is_crisis_message(user_message):
+        return build_crisis_reply()
 
     if not normalized_message or mentions_any("hello", "hi", "hey"):
         return "Hello. I'm here with you. Tell me what's happening so I can help you."

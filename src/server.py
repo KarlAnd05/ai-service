@@ -4,6 +4,7 @@ from urllib.parse import urlparse
 
 from chat import build_fallback_reply, chat_with_context, embed_query
 from config import config
+from crisis import build_crisis_reply, is_crisis_message
 from intent_classifier import build_intent_reply, classify_intent
 from rag import build_index, ensure_index_exists, rank_documents
 
@@ -105,8 +106,34 @@ class AIServiceHandler(BaseHTTPRequestHandler):
                     )
                     return
 
+                if is_crisis_message(message):
+                    self.send_json(
+                        200,
+                        {
+                            "ok": True,
+                            "coachName": coach_name,
+                            "reply": build_crisis_reply(),
+                            "usedFallback": False,
+                            "usedIntentModel": False,
+                            "intent": {
+                                "label": "crisis",
+                                "confidence": 1,
+                                "ranked": [],
+                            },
+                            "sources": [
+                                {
+                                    "id": "knowledge/shared/crisis-escalation.md",
+                                    "filePath": "knowledge/shared/crisis-escalation.md",
+                                    "title": "crisis-escalation",
+                                    "score": 1,
+                                }
+                            ],
+                        },
+                    )
+                    return
+
                 intent_prediction = classify_intent(message)
-                trained_reply = build_intent_reply(intent_prediction)
+                trained_reply = build_intent_reply(intent_prediction, message)
 
                 if trained_reply:
                     self.send_json(

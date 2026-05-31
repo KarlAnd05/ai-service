@@ -121,6 +121,45 @@ EXAM_SUPPORT_REPLY = (
 )
 
 _cached_model = None
+EXAM_CONTEXT_TERMS = (
+    "exam",
+    "exams",
+    "final",
+    "finals",
+    "midterm",
+    "midterms",
+    "test",
+    "tests",
+    "quiz",
+    "quizzes",
+    "study",
+    "studying",
+    "studied",
+    "class",
+    "classes",
+    "school",
+)
+PRESENTATION_CONTEXT_TERMS = (
+    "presentation",
+    "present",
+    "presenting",
+    "project",
+    "speech",
+    "class",
+    "meeting",
+)
+RELATIONSHIP_CONTEXT_TERMS = (
+    "boyfriend",
+    "girlfriend",
+    "partner",
+    "husband",
+    "wife",
+    "relationship",
+    "breakup",
+    "break up",
+    "broke up",
+    "ex",
+)
 
 
 def tokenize(text):
@@ -129,6 +168,17 @@ def tokenize(text):
     words = re.findall(r"[a-z0-9']+", normalized.lower())
     bigrams = [f"{words[index]}_{words[index + 1]}" for index in range(len(words) - 1)]
     return [*words, *bigrams]
+
+
+def normalize_text(text):
+    normalized = unicodedata.normalize("NFD", str(text or ""))
+    normalized = "".join(char for char in normalized if not unicodedata.combining(char))
+    return normalized.lower()
+
+
+def contains_any_term(text, terms):
+    normalized = normalize_text(text)
+    return any(term in normalized for term in terms)
 
 
 def load_model():
@@ -202,18 +252,36 @@ def classify_intent(message):
     }
 
 
-def build_intent_reply(prediction):
+def build_intent_reply(prediction, message=""):
     if not prediction:
         return None
 
     label = prediction.get("label")
     confidence = prediction.get("confidence", 0)
+    has_exam_context = contains_any_term(message, EXAM_CONTEXT_TERMS)
+    has_presentation_context = contains_any_term(message, PRESENTATION_CONTEXT_TERMS)
+    has_relationship_context = contains_any_term(message, RELATIONSHIP_CONTEXT_TERMS)
 
-    if label == "exam_stress" and confidence >= 0.22:
-        return EXAM_SUPPORT_REPLY
+    if label == "exam_stress":
+        if not has_exam_context or has_relationship_context:
+            return None
+        if confidence >= 0.22:
+            return EXAM_SUPPORT_REPLY
+
+    if label == "presentation_anxiety" and not has_presentation_context:
+        return None
+
+    if label in {"relationship_distress", "cheating_betrayal", "betrayal_trust", "panic_after_betrayal"}:
+        if not has_relationship_context:
+            return None
 
     config = INTENT_REPLY_CONFIG.get(label)
     if config and confidence >= config["min_confidence"]:
         return config["reply"]
+
+    if has_relationship_context and confidence >= 0.3:
+        relationship_config = INTENT_REPLY_CONFIG.get("relationship_distress")
+        if relationship_config:
+            return relationship_config["reply"]
 
     return None
